@@ -11,7 +11,10 @@ class PostController extends Controller
      * For fetching post data
      */
     public function index() {
-        return view('test');
+
+        $posts = Post::orderBy('created_at', 'desc')->get();
+
+        return view('test', compact('posts'));
     }
 
    /**
