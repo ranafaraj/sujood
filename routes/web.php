@@ -14,8 +14,8 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('test', [PostController::class, 'index'])->name('post.index');
-Route::post('test/posts/store', [PostController::class, 'store'])->name('post.store');
+Route::get('posts', [PostController::class, 'index'])->name('post.index');
+Route::post('posts/store', [PostController::class, 'store'])->name('post.store');
 
 Auth::routes();
 

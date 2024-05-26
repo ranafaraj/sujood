@@ -14,7 +14,7 @@ class PostController extends Controller
 
         $posts = Post::orderBy('created_at', 'desc')->get();
 
-        return view('test', compact('posts'));
+        return view('users.posts.index', compact('posts'));
     }
 
    /**
