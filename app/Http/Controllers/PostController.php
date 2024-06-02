@@ -12,7 +12,7 @@ class PostController extends Controller
      */
     public function index() {
 
-        $posts = Post::orderBy('created_at', 'desc')->get();
+        $posts = Post::with('user', 'likes')->orderBy('created_at', 'desc')->get();
 
         return view('users.posts.index', compact('posts'));
     }
@@ -28,6 +28,7 @@ class PostController extends Controller
 
     Post::create([
         'content' => $request->content,
+        'user_id' => auth()->user()->id,
     ]);
 
     return redirect()->back();

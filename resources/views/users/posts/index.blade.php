@@ -46,17 +46,20 @@
 
                     <div class="card my-3">
                         <div class="card-header">
-                        Quote
+                        {{ $post->user->name }}
                         </div>
                         <div class="card-body">
                         <blockquote class="blockquote mb-0">
                             <p>{{ $post->content }}</p>
-                            <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite></footer>
                         </blockquote>
 
                         <hr>
 
-                        <button class="btn btn-outline-primary">Like <span class="badge text-bg-primary">2</span></button>
+                        <form action="{{ route('posts.likes', ['post' => $post, 'user' => auth()->user()->id]) }}" method="POST">
+                            @csrf
+                            @method('POST')
+                            <button class="btn btn-outline-primary btn-sm">Like <span class="badge text-bg-primary">{{ $post->likes->count() }}</span></button>
+                        </form>
                         </div>
                     </div>
                 @endforeach

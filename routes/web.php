@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\PostLikeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -14,8 +15,15 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('posts', [PostController::class, 'index'])->name('post.index');
-Route::post('posts/store', [PostController::class, 'store'])->name('post.store');
+
+
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('posts', [PostController::class, 'index'])->name('post.index');
+    Route::post('posts/store', [PostController::class, 'store'])->name('post.store');
+
+    Route::post('posts/like/{post}/{user}', [PostLikeController::class, 'toggleLike'])->name('posts.likes');
+});
+
 
 Auth::routes();
 
