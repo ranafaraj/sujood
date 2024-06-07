@@ -20,6 +20,10 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => ['auth']], function () {
     Route::get('posts', [PostController::class, 'index'])->name('post.index');
     Route::post('posts/store', [PostController::class, 'store'])->name('post.store');
+    Route::put('posts/{post}/update/', [PostController::class, 'update'])->name('post.update');
+    Route::delete('posts/{post}/delete', [PostController::class, 'delete'])->name('post.delete');
+
+    
 
     Route::post('posts/like/{post}/{user}', [PostLikeController::class, 'toggleLike'])->name('posts.likes');
 });
@@ -28,4 +32,4 @@ Route::group(['middleware' => ['auth']], function () {
 Auth::routes();
 
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [PostController::class, 'index'])->name('home');

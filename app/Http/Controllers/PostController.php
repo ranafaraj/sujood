@@ -12,7 +12,7 @@ class PostController extends Controller
      */
     public function index() {
 
-        $posts = Post::with('user', 'likes')->orderBy('created_at', 'desc')->get();
+        $posts = Post::with('user', 'likes')->orderBy('created_at', 'desc')->paginate(5);
 
         return view('users.posts.index', compact('posts'));
     }
@@ -30,6 +30,34 @@ class PostController extends Controller
         'content' => $request->content,
         'user_id' => auth()->user()->id,
     ]);
+
+    return redirect()->back();
+   }
+
+   /**
+    * Updating a post instance
+   */
+   public function update(Request $request, Post $post) {
+
+    $this->validate($request, [
+        'content' => ['required', 'min:3', 'max:1000']
+    ]);
+
+    $post->update([
+        'content' => $request->content,
+    ]);
+
+    return redirect()->back();
+   }
+
+   /**
+    * Delete post instance
+    */
+   public function delete(Post $post) {
+
+    $post->likes()->delete();
+
+    $post->delete();
 
     return redirect()->back();
    }
