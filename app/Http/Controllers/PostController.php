@@ -12,7 +12,7 @@ class PostController extends Controller
      */
     public function index() {
 
-        $posts = Post::with('user', 'likes')->orderBy('created_at', 'desc')->paginate(5);
+        $posts = Post::with('user', 'likes')->orderBy('created_at', 'desc')->paginate(2);
 
         return view('users.posts.index', compact('posts'));
     }
@@ -43,6 +43,8 @@ class PostController extends Controller
         'content' => ['required', 'min:3', 'max:1000']
     ]);
 
+    $this->authorize('update', $post);
+
     $post->update([
         'content' => $request->content,
     ]);
@@ -54,6 +56,8 @@ class PostController extends Controller
     * Delete post instance
     */
    public function delete(Post $post) {
+
+    $this->authorize('delete', $post);
 
     $post->likes()->delete();
 

@@ -53,9 +53,12 @@
 
                                 <div class="col">
                                     <div class="dropdown text-end">
-                                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Options
-                                        </button>
+
+                                        @can('update', $post)
+                                            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Options
+                                            </button>
+                                        @endcan
                                         <ul class="dropdown-menu">
                                           <li><a class="dropdown-item btn" data-bs-toggle="modal" data-bs-target="#modal_{{ $post->id }}">Edit</a></li>
                                           <li><hr class="dropdown-divider"></li>
@@ -85,6 +88,7 @@
 
             @endif
 
+            {{ $posts->links() }}
         </div>
 
     </div>
@@ -149,7 +153,7 @@
 
         </div>
     @endforeach
-    
+
 
 </div>
 

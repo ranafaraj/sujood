@@ -23,7 +23,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('posts/{post}/update/', [PostController::class, 'update'])->name('post.update');
     Route::delete('posts/{post}/delete', [PostController::class, 'delete'])->name('post.delete');
 
-    
+
 
     Route::post('posts/like/{post}/{user}', [PostLikeController::class, 'toggleLike'])->name('posts.likes');
 });
