@@ -1,12 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-
-
 <div class="container p-3">
-
     <div class="row">
-
         <!-- Text area -->
         <div class="col-4">
             <form class="bg-white p-2 shadow rounded" action="{{ route('post.store') }}" method="POST">
@@ -21,27 +17,18 @@
                     @enderror
                     <label for="floatingTextarea2">What's on your mind?</label>
                 </div>
-
                 <button type="submit" class="btn btn-sm btn-primary mt-3">Post</button>
             </form>
         </div>
-
-
         <!-- Feed -->
         <div class="col">
-
             @if ($posts->count() == 0)
-
             <div class="p-3 text-white shadow-sm bg-secondary rounded border">
                 There are no posts yet!
             </div>
-
             @endif
-
             @if($posts->count() > 0)
-
                 @foreach ($posts as $post)
-
                     <div class="card bg-white shadow border-0 mb-3">
                         <div class="card-header border-0 bg-white">
                             <div class="row">
@@ -50,10 +37,8 @@
                                         {{ $post->user->name }}
                                     </div>
                                 </div>
-
                                 <div class="col">
                                     <div class="dropdown text-end">
-
                                         @can('update', $post)
                                             <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                 Options
@@ -69,36 +54,54 @@
                             </div>
                         </div>
                         <div class="card-body">
-                        <blockquote class="blockquote mb-0">
-                            <p>{{ $post->content }}</p>
-                        </blockquote>
-
-                        <hr>
-
-                        <form action="{{ route('posts.likes', ['post' => $post, 'user' => auth()->user()->id]) }}" method="POST">
-                            @csrf
-                            @method('POST')
-                            <button class="btn btn-outline-primary btn-sm">
-                                {{ $post->likes->contains('user_id', auth()->user()->id) ? "Unlike" : "Like" }}
-                                <span class="badge text-bg-primary">{{ $post->likes->count() }}</span></button>
-                        </form>
+                            <blockquote class="blockquote mb-0">
+                                <p>{{ $post->content }}</p>
+                            </blockquote>
+                            <hr>
+                            <form action="{{ route('posts.likes', ['post' => $post, 'user' => auth()->user()->id]) }}" method="POST">
+                                @csrf
+                                @method('POST')
+                                <button class="btn btn-outline-primary btn-sm">
+                                    {{ $post->likes->contains('user_id', auth()->user()->id) ? "Unlike" : "Like" }}
+                                    <span class="badge text-bg-primary">{{ $post->likes->count() }}</span></button>
+                            </form>
+                            <!-- Comments Section -->
+                            <div class="mt-3">
+                                <h6>Comments:</h6>
+                                @foreach ($post->comments as $comment)
+                                    <div class="border rounded p-2 mb-2">
+                                        <strong>{{ $comment->user->name }}</strong>: {{ $comment->content }}
+                                        <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
+                                    </div>
+                                @endforeach
+                                <!-- Add Comment -->
+                                <form action="{{ route('comments.store', $post) }}" method="POST">
+                                    @csrf
+                                    @method('POST')
+                                    <div class="form-floating mt-2">
+                                        <textarea class="form-control @error('content') border border-danger @enderror" name="content" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 50px"></textarea>
+                                        @error('content')
+                                            <div class="text-danger">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                        <label for="floatingTextarea2">Add a comment...</label>
+                                    </div>
+                                    <button type="submit" class="btn btn-sm btn-primary mt-2">Comment</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 @endforeach
-
             @endif
-
             {{ $posts->links() }}
         </div>
-
     </div>
-
     @foreach ($posts as $post)
         <!-- Edit Modal -->
         <div class="modal fade" id="modal_{{ $post->id }}" tabindex="-1" aria-labelledby="modal_{{ $post->id }}" aria-hidden="true">
             <div class="modal-dialog modal-lg">
             <form action="{{ route('post.update', $post) }}" method="POST">
-
                 <div class="modal-content">
                     <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Edit your post</h1>
@@ -116,7 +119,6 @@
                                 @enderror
                                 <label for="floatingTextarea2">Edit your post</label>
                             </div>
-
                     </div>
                     <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -125,13 +127,10 @@
                 </div>
                 </div>
             </form>
-
         </div>
-
         <!-- Delete Modal -->
         <div class="modal fade" id="delete_{{ $post->id }}" tabindex="-1" aria-labelledby="delete_{{ $post->id }}" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
-
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="exampleModalLabel">Delete confirmation</h1>
@@ -150,12 +149,7 @@
                     </div>
                 </div>
             </div>
-
         </div>
     @endforeach
-
-
 </div>
-
-
 @endsection
